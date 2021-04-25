@@ -1,7 +1,8 @@
 
 # importing the necessary dependencies
-from flask import Flask, render_template, request
 import pickle
+
+from flask import Flask, render_template, request
 
 application = Flask(__name__) # initializing a flask app
 @application.route('/',methods=['GET'])  # route to display the home page
@@ -19,9 +20,10 @@ def index():
             loaded_model = pickle.load(open(filename, 'rb')) # loading the model file from the storage
             # predictions using the loaded model file
             prediction=loaded_model.predict([[LSTAT,RM]])
+            #prediction = [75]
             print('prediction is', prediction)
             # showing the prediction results in a UI
-            return render_template('results.html',prediction=round(100*prediction[0]))
+            return render_template('results.html',prediction=round(prediction[0],2))
         except Exception as e:
             print('The Exception message is: ',e)
             error_string = str(e)
@@ -30,4 +32,4 @@ def index():
         return render_template('index.html')
 
 if __name__ == "__main__":
-	application.run(debug=True) # running the app
+    application.run(debug=True) # running the app
